@@ -1,4 +1,5 @@
-<?php/*---------------------------------
+<?php
+/*---------------------------------
 	GF HARDENING
 ------------------------------------*/
 function harden_gravity_forms_validation( $result, $value, $form, $field ) {
