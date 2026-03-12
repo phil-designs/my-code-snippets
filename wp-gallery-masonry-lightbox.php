@@ -1,8 +1,8 @@
 <?php
-/*---------------------------------
-	Masonry Gallery with Lightbox
+/*---------------------------------------------------
+	Masonry Gallery with Lightbox for WP Galleries
 	Uses: Isotope, imagesLoaded, Fancybox
-------------------------------------*/
+------------------------------------------------------*/
 function aa_enqueue_gallery_scripts() {
 	global $post;
 	if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'gallery' ) ) {
@@ -24,6 +24,7 @@ function aa_masonry_gallery_shortcode( $output, $attr ) {
 		'size'    => 'large',
 		'include' => '',
 		'exclude' => '',
+		'columns' => 2,
 	), $attr, 'gallery' );
 
 	$id = intval( $atts['id'] );
@@ -54,12 +55,17 @@ function aa_masonry_gallery_shortcode( $output, $attr ) {
 		return '';
 	}
 
-	$gallery_id = 'aa-gallery-' . $id;
+	static $gallery_counter = 0;
+	$gallery_counter++;
+	$gallery_id = 'aa-gallery-' . $gallery_counter;
+	$columns    = max( 1, min( 9, intval( $atts['columns'] ) ) );
+	$gutter     = 16;
+	$item_width = round( 100 / $columns, 4 ) . '% - ' . round( ( $columns - 1 ) * $gutter / $columns, 4 ) . 'px';
 
 	$html  = '<style>';
 	$html .= '#' . $gallery_id . ' { display: block; }';
-	$html .= '.aa-masonry-item { width: calc(50% - 8px); margin-bottom: 16px; box-sizing: border-box; }';
-	$html .= '.aa-masonry-item img { display: block; width: 100%; height: auto; }';
+	$html .= '#' . $gallery_id . ' .aa-masonry-item { width: calc(' . $item_width . '); margin-bottom: ' . $gutter . 'px; box-sizing: border-box; }';
+	$html .= '#' . $gallery_id . ' .aa-masonry-item img { display: block; width: 100%; height: auto; }';
 	$html .= '</style>';
 
 	$html .= '<div id="' . esc_attr( $gallery_id ) . '" class="aa-masonry-gallery">';
