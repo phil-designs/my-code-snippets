@@ -36,7 +36,8 @@ function harden_gravity_forms_validation( $result, $value, $form, $field ) {
     // -------------------------
     if ( $field->type === 'date' && ! empty( $value ) ) {
 
-        $timestamp = strtotime( $value );
+        $date_string = is_array( $value ) ? implode( '/', array_filter( $value ) ) : $value;
+        $timestamp = strtotime( $date_string );
 
         if ( $timestamp ) {
             $year = (int) date( 'Y', $timestamp );
